@@ -1,0 +1,57 @@
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+<script>
+  console.log(d3); // test if d3 is loaded
+  // Add an SVG
+  var doc = d3.selectAll("div")
+  	.data([0])
+  .enter().append("div")
+
+  var svg = doc.selectAll("svg")
+  	.data([0])
+  .enter().append("svg")
+  	.attr("width", 900)
+  	.attr("height", 600)
+  // Add Rectangles
+  svg.selectAll("rect")
+    .data([100, 200])
+  .enter().append("rect")
+    .attr("width", function(d) { return d / 2; })
+    .attr("height", function(d) { return d; })
+    .attr("y", function() { return 0; })
+    .attr("x", function(d) { return d * 2; });
+
+  var rects = svg.selectAll("rect");
+
+  rects.style("fill", function(d) { return d * 4; });
+
+  // Add Circles
+  svg.selectAll("circle")
+    .data([10, 20, 30, 40])
+  .enter().append("circle")
+    .attr("cy", function(d) { return d * 10; })
+    .attr("cx", function(d) { return d * 10; })
+    .attr("r", function(d) { return d; });
+
+  var circles = svg.selectAll("circle");
+
+  // if the data or this modifier are changed the circles may default to black
+  circles.style("fill", function(d) { return (d * 23) % 255; });
+  // Add Lines
+  svg.selectAll("line")
+    .data([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+  .enter().append("line")
+    .attr("x1", function() { return Math.random() * 900; })
+    .attr("y1", function() { return Math.random() * 600; })
+    .attr("x2", function() { return Math.random() * 900; })
+    .attr("y2", function() { return Math.random() * 600; });
+
+  var lines = svg.selectAll("line");
+
+  lines.style("stroke-width", function(d) { return 2; });
+  lines.style("stroke", function(d) { return "#00ffff"; });
+
+  // Add Polygons
+
+</script>
