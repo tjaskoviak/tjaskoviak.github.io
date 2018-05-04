@@ -1,0 +1,291 @@
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+rect {
+	color: black;
+}
+
+#pieTitle {
+	text-align: center;
+	font-size: 3em;
+}
+
+div.tooltip {
+	position: absolute;
+	text-align: center;
+	width: 100px;
+	height: 40px;
+	padding: 2px;
+	border: 1px;
+	border-radius: 3px;
+	pointer-events: none;
+	background-color: steelblue;
+}
+body, svg {
+	background-color: silver;
+}
+</style>
+
+<body>
+  <h1> Multiple Views- Most Popular Surnames in America (2000) </h1>
+  <h2> Click on a bar/name to start exploring </h2>
+  <div>
+  	<svg width="720" height="500" display="block" id="bar">
+  	</svg>
+  </div>
+  <div id="pie">
+  	<div id="pieTitle">
+  	</div>
+  	<svg width="720" height="500" display="block">
+  	</svg>
+  </div>
+  <div id="prop">
+  	<svg width="720" height="500" display="block">
+  	</svg>
+  </div>
+</body>
+
+<script>
+  console.log(d3); // test if d3 is loaded
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+	  width = 720 - margin.left - margin.right,
+	  height = 500 - margin.top - margin.bottom;
+	  radius = height / 2 - 50;
+
+  var svgbar = d3.select("#bar")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform", 
+	          "translate(" + margin.left + "," + margin.top + ")");
+ 
+  var svgprop = d3.select("#prop").select("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform", 
+	          "translate(" + margin.left + "," + margin.top + ")");
+  
+  var svgpie = d3.select("#pie").select("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform", 
+	          "translate(" + width/2 + "," + height/2 + ")");
+
+  var color = d3.scaleOrdinal()
+    .range(["#ff0080", "#ff8000", "#bfff00", "#00bfff", "#0080ff", "#8000ff"]);
+
+  var fullData = {};
+
+  d3.csv("/data/Top1000.csv", function(error,data) {
+  	if(error) throw error;
+
+    fullData = data.map(function(d, i)
+        {
+            //each d is one line of the csv file represented as a json object
+            //console.log("d", d)
+
+            return {
+            	name : d.name, 
+            	rank : +d.rank,
+            	count : +d.count,
+            	prop100 : +d.prop100k,
+            	cumProp100 : +d.cum_prop100k,
+            	white : +d.White,
+            	black : +d.Black,
+            	API : +d.API,
+            	AIAN : +d.AIAN,
+            	Mixed : +d.Mixed,
+            	Hisp : +d.Hispanic
+            };
+        }), console.log(fullData[0]), makeChart();
+
+  });
+
+  function getData() {
+  	return fullData.slice(0,20);
+  }
+
+  function getProp(num) {
+  	var workingSet = fullData.slice(num, num + 1)[0];
+  	var collection = [{"ethni" : "White", "prop": 0}, 
+  					  {"ethni" : "Black", "prop": 0},
+  					  {"ethni" : "Asian and Pacific Islander", "prop": 0},
+  					  {"ethni" : "American Indian and Alaskan Native", "prop": 0},
+  					  {"ethni" : "Mixed Race", "prop": 0},
+  					  {"ethni" : "Hispanic", "prop": 0},]
+  	collection[0].prop = workingSet.white;
+  	collection[1].prop = workingSet.black;
+  	collection[2].prop = workingSet.API;
+  	collection[3].prop = workingSet.AIAN;
+  	collection[4].prop = workingSet.Mixed;
+  	collection[5].prop = workingSet.Hisp;
+  	return collection;
+  }
+
+  function makeChart() {
+	var dataSet = getData();
+
+  	var props = getProp(0);
+
+	//barchart
+	svgbar.selectAll('.bar')
+  			.data(dataSet)
+  		.enter().append('rect')
+  			.classed('bar', true)
+  			.attr('x', function(d, i) {
+  				return i * 30
+  			})
+  			.attr('y', function(d, i) {
+  				return 400 - d.count / 6000
+  			})
+  			.style('fill',  'skyblue')
+  			.style('stroke', "000000")
+  			.attr('height', function(d, i) {
+  				return d.count / 6000
+  			})
+  			.attr('width', 26)
+  			.on('mouseover', function(d) {
+  				d3.select(this).attr('fill', 'black')
+  			bartips.transition()
+  					.duration(100)
+  					.style('opacity', .9);
+  			bartips.html(d.name + "<br>" + d.count)
+  					.style('left', (d3.event.pageX))
+  					.style('top', (d3.event.pageY - 30))
+  			})
+  			.on('mouseout', function(d) {
+  			bartips.transition()
+  					.duration(100)
+  					.style('opacity', 0);
+  			})
+  			.on('click', function(d,i) {
+  				props = getProp(i);
+  				d3.select('#pieTitle').text(d.name)
+  				svgpie.selectAll('.arc').remove()
+  				svgpie.selectAll('.arc')
+  					.data(pie(props))
+  				  .enter().append('g')
+  				  	.attr('class', 'arc')
+  				 svgpie.selectAll('.arc')
+			  		.append('path')
+			  		.attr('d', arc)
+			  		.style('fill', function(d) {
+			  			return color(d.data.ethni)
+			  		})
+			  		.on('mouseover', function(d) {
+			  			d3.select(this)
+			  				.attr('fill', 'black');
+			  			tooltips.transition()
+			  					.duration(100)
+			  					.style('opacity', .9);
+			  			tooltips.html(d.data.ethni + "<br>" + d.data.prop + "%")
+			  					.style('left', (d3.event.pageX))
+			  					.style('top', (d3.event.pageY - 30))
+			  					.style('width', function() {
+			  						if(d.data.ethni.length > 30) {
+			  							return '275px';
+			  						} else if(d.data.ethni.length > 10){
+			  							return '200px';
+			  						} else {
+			  							return '100px';
+			  						}
+			  					});
+			  		})
+			  		.on('mouseout', function(d) {
+			  			tooltips.transition()
+			  					.duration(100)
+			  					.style('opacity', 0);
+			  		})
+			  	svgprop.selectAll('ellipse').remove()
+			  	svgprop.selectAll('ellipse')
+			  		.data(props)
+			  	  .enter()
+			  	  	.append('ellipse')
+			  	  	.attr('cx', function(d, i) {
+			  				return i * 100 + 40;
+			  		})
+			  		.attr('cy', function(d, i) {
+			  			return 150
+			  		})
+					.style('fill', function(d) {
+			  			return color(d.ethni)
+			  		})
+			  		.attr('ry', function(d) { return d.prop * 1.5 + 5 })
+			  		.attr('rx', 30)
+			  		.on('mouseover', function(d,i) {
+		  			d3.select(this).attr('fill', 'black');
+		  			proptips.transition()
+		  					.duration(100)
+		  					.style('opacity', .9);
+		  			proptips.html(d.ethni + "<br>" + Math.floor(d.prop * dataSet[i].count / 100))
+		  					.style('left', (d3.event.pageX))
+		  					.style('top', (d3.event.pageY - 30))
+		  					.style('width', function() {
+		  						if(d.ethni.length > 30) {
+		  							return '275px';
+		  						} else if(d.ethni.length > 10){
+		  							return '200px';
+		  						} else {
+		  							return '100px';
+		  						}
+  					});
+  		})
+  		.on('mouseout', function(d) {
+  			proptips.transition()
+  					.duration(100)
+  					.style('opacity', 0);
+  		})
+
+  				console.log("props set to " + i)
+  			});
+
+  	var bartips = d3.select('#pie')
+  			.append("div")
+  			.attr('class', 'tooltip')
+  			.style('opacity', 0)
+  			.text("Hello");
+  	
+  	var arc = d3.arc()
+  		.outerRadius(radius - 10)
+  		.innerRadius(0);
+
+  	var arcLabels = d3.arc()
+  		.outerRadius(radius + 30)
+  		.innerRadius(radius + 30);
+
+  	var pie = d3.pie()
+  		.sort(null)
+  		.value(function(d) { return d.prop; });
+
+  	svgpie.selectAll('.arc')
+  		.data(pie(props))
+  	  .enter().append('g')
+  		.attr('class', 'arc');
+
+  	var tooltips = d3.select('#pie')
+  			.append("div")
+  			.attr('class', 'tooltip')
+  			.style('opacity', 0)
+  			.text("Hello");
+
+  	var proptips = d3.select('#prop')
+  			.append("div")
+  			.attr('class', 'tooltip')
+  			.style('opacity', 0)
+  			.text("Hello");
+
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
