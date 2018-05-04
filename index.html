@@ -79,7 +79,7 @@ body, svg {
 
   var fullData = {};
 
-  d3.csv("/data/Top1000.csv", function(error,data) {
+  d3.csv("Top1000.csv", function(error,data) {
   	if(error) throw error;
 
     fullData = data.map(function(d, i)
