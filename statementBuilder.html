@@ -1,6 +1,8 @@
 <form id="formatter" onsubmit="formatText()">
   Starting Text:<br>
   <input type="text" id="first" value=""><br>
+  Joining Statement:<br>
+  <input type="text" id="joining" value="OR"><br>
   All Ids:<br>
   <textarea id="AllIds" rows="5" cols="50" value=""></textarea><br>
   Ending Text:<br>
@@ -18,6 +20,7 @@
 		console.log("Hi");
 		var opener = document.getElementById("first").value;
 		var closer = document.getElementById("last").value;
+		var joiner = document.getElementById("joining").value;
 		console.log(opener, closer);
 
 		var lines = document.getElementById("AllIds").value.split('\n');
@@ -27,7 +30,7 @@
 			fullStatement = fullStatement.concat(opener, lines[i], closer);
 			console.log(opener + lines[i] + closer);
 			if(i < lines.length - 1) {
-				fullStatement = fullStatement.concat(" OR ");
+				fullStatement = fullStatement.concat(" ", joiner, " ");
 			}
 
 			document.getElementById("result").innerHTML = fullStatement;
@@ -57,79 +60,5 @@
 	OR Apttus_Config2__ProductName__c LIKE '%IBM Regional Distribution Access Fee%' 
 	OR Apttus_Config2__ProductName__c LIKE '%IBM Digital Experience Plus%' 
 	OR Apttus_Config2__ProductName__c LIKE '%Watson Customer Experience Analytics%'
-	
-	WHERE APTS_Ext_ID__c = 'a2u21000000mwh2AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgJAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgJAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgxAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgYAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwhCAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwjRAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwlyAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwhRAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwn8AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwmyAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwm3AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx5CAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx5RAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx78AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx5HAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwubAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwwAAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwbUAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwg9AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwfuAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgEAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwfkAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwfzAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxHeAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxFiAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxCZAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxHjAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxFnAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxAPAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwriAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwsGAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwsLAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwuCAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwsVAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwpWAAA'
-
-	WHERE APTS_Ext_ID__c = 'a2u21000000mwh2AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgJAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgJAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgxAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgYAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwhCAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwjRAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwlyAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwhRAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwn8AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwmyAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwm3AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx5CAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx5RAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx78AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mx5HAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwubAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwwAAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwbUAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwg9AAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwfuAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwgEAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwfkAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwfzAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxHeAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxFiAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxCZAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxHjAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxFnAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mxAPAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwriAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwsGAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwsLAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwuCAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwsVAAA' 
-	OR APTS_Ext_ID__c = 'a2u21000000mwpWAAA'
 	*/
 </script>
