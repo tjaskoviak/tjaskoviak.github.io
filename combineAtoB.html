@@ -1,0 +1,38 @@
+<form id="formatter" onsubmit="formatText()">
+  All Ids:<br>
+  <textarea id="GBTId" rows="5" cols="50" value=""></textarea><br>
+  CountryIDs:<br>
+  <textarea id="CountryID" rows="5" cols="50" value=""></textarea><br>
+  <input type="submit" value="Submit">
+</form>
+
+<body id="result">
+</body>
+
+<script>
+	var fullStatement = "";
+
+	function formatText() {
+		console.log("Hi");
+		
+		var gbts = document.getElementById("GBTId").value.split('\n');
+		var countries = document.getElementById("CountryID").value.split('\n');
+		console.log(gbts);
+		console.log(countries);
+
+
+		for(var i = 0; i < gbts.length; i++) {
+			for(var j = 0; j < countries.length; j++) {
+				fullStatement = fullStatement.concat(gbts[i], ",", countries[j]);
+				fullStatement = fullStatement.concat("<br>");
+			}
+			/*
+			fullStatement = fullStatement.concat(opener, lines[i], closer);
+			console.log(opener + lines[i] + closer);
+			if(i < lines.length - 1) {
+				fullStatement = fullStatement.concat(" OR ");*/
+		}
+
+		document.getElementById("result").innerHTML = fullStatement;
+	}
+</script>
