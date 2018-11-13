@@ -1,0 +1,41 @@
+<form id="formatter" onsubmit="return formatText()">
+  Master:<br>
+  <textarea id="Master" rows="5" cols="50" value=""></textarea><br>
+  Child:<br>
+  <textarea id="Child" rows="5" cols="50" value=""></textarea><br>
+  <input type="submit" value="Submit">
+</form>
+
+<body id="result">
+</body>
+
+<script>
+	var fullStatement = "";
+
+	function formatText() {
+		console.log("Hi");
+		
+		var master = document.getElementById("Master").value.split('\n');
+		var child = document.getElementById("Child").value.split('\n');
+		console.log(master);
+		console.log(child);
+
+
+		for(var i = 0; i < master.length; i++) {
+			var currRow = master[i].split(',');
+			console.log(currRow[currRow.length - 1]);
+			for(var j = 0; j < child.length; j++) {
+				var currChild = child[j].split(',');
+				if(currChild[0] == currRow[currRow.length - 1]) {
+					currRow.push(currChild);
+					break;
+				}
+			}
+			fullStatement = fullStatement.concat(currRow, "<br>");
+		}
+
+		document.getElementById("result").innerHTML = fullStatement;
+
+		return false;
+	}
+</script>
